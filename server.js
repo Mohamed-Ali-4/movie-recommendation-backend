@@ -5,11 +5,17 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// Middleware - UPDATED CORS
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    'https://movie-recommendation-frontend-tau.vercel.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
 // Routes
