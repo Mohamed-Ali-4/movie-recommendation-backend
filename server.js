@@ -43,6 +43,9 @@ app.use('/api/movies', require('./routes/movies'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/recommendations', require('./routes/recommendations'));
+// Add these lines with other app.use() routes:
+app.use('/api/discovery', require('./routes/discovery'));
+app.use('/api/profile', require('./routes/profile'));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
