@@ -6,10 +6,10 @@ require('dotenv').config();
 
 const app = express();
 
-// Compression middleware (reduce file size)
+// Compression middleware
 app.use(compression());
 
-// Caching middleware
+// Cache middleware
 app.use((req, res, next) => {
   // Cache static assets for 1 year
   if (req.url.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
@@ -19,40 +19,62 @@ app.use((req, res, next) => {
   else if (req.url.startsWith('/api/')) {
     res.set('Cache-Control', 'public, max-age=300');
   }
+
   next();
 });
 
-// CORS
+// =======================
+// CORS FIX
+// =======================
 app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://movie-recommendation-frontend-tau.vercel.app'
   ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true
 }));
 
-// Middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+// Handle preflight requests
+app.options('*', cors());
 
+// =======================
+// Middleware
+// =======================
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({
+  limit: '10mb',
+  extended: true
+}));
+
+// =======================
 // Routes
+// =======================
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/movies', require('./routes/movies'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/recommendations', require('./routes/recommendations'));
-// Add these lines with other app.use() routes:
 app.use('/api/discovery', require('./routes/discovery'));
 app.use('/api/profile', require('./routes/profile'));
 
-// Connect to MongoDB
+// =======================
+// Root Route
+// =======================
+app.get('/', (req, res) => {
+  res.send('🎬 CineAI Backend Running Successfully');
+});
+
+// =======================
+// MongoDB Connection
+// =======================
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected!');
-    app.listen(process.env.PORT, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT}`);
+
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`🚀 Server running on port ${process.env.PORT || 5000}`);
     });
   })
-  .catch(err => console.error('❌ Connection error:', err));
+  .catch(err => {
+    console.error('❌ MongoDB Connection Error:', err);
+  });
