@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 // =======================
-// CORS FIX
+// CORS
 // =======================
 app.use(cors({
   origin: [
@@ -33,9 +33,6 @@ app.use(cors({
   ],
   credentials: true
 }));
-
-// Handle preflight requests
-app.options('*', cors());
 
 // =======================
 // Middleware
