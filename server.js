@@ -29,9 +29,13 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://movie-recommendation-frontend-tau.vercel.app'
+    'http://localhost:3001',
+    'https://movie-recommendation-frontend-tau.vercel.app',
+    'https://movie-recommendation-nextjs-mu.vercel.app'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // =======================
