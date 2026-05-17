@@ -62,7 +62,7 @@ app.use('/api/profile', require('./routes/profile'));
 // Root Route
 // =======================
 app.get('/', (req, res) => {
-  res.send('🎬 CineAI Backend Running Successfully');
+  res.send('🎬 WatchWise Backend Running Successfully');
 });
 
 // =======================
