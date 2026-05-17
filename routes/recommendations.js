@@ -4,6 +4,25 @@ const Recommendation = require('../models/Recommendation');
 const Movie = require('../models/Movie');
 const User = require('../models/User');
 const { generateSmartRecommendations } = require('../services/aiRecommendation');
+const { recommendByMood } = require('../services/moodRecommendation');
+
+// Mood-based recommendations (public)
+router.post('/mood', async (req, res) => {
+  try {
+    const { mood } = req.body || {};
+    if (typeof mood !== 'string' || mood.trim().length < 2) {
+      return res.status(400).json({ message: 'Provide a mood description (min 2 chars).' });
+    }
+    if (mood.length > 500) {
+      return res.status(400).json({ message: 'Mood text too long (max 500 chars).' });
+    }
+    const result = await recommendByMood(mood.trim());
+    res.json(result);
+  } catch (err) {
+    console.error('Mood recommendation error:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // AI Search for movies
 router.post('/search', async (req, res) => {
