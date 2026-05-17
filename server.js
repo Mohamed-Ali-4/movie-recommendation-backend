@@ -57,6 +57,7 @@ app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/recommendations', require('./routes/recommendations'));
 app.use('/api/discovery', require('./routes/discovery'));
 app.use('/api/profile', require('./routes/profile'));
+app.use('/api/tmdb', require('./routes/tmdb'));
 
 // =======================
 // Root Route
