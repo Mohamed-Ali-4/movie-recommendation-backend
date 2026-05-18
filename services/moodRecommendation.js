@@ -5,7 +5,6 @@ const hf = process.env.HUGGINGFACE_API_KEY
   ? new HfInference(process.env.HUGGINGFACE_API_KEY)
   : null;
 
-// Keyword lexicon: mood phrase -> TMDB genre name
 const MOOD_KEYWORDS = {
   Comedy: ['funny', 'laugh', 'humor', 'humour', 'comedy', 'comedic', 'silly', 'lighthearted', 'light-hearted', 'feel-good', 'feel good', 'feelgood', 'cheerful', 'amusing', 'hilarious', 'witty'],
   Romance: ['romantic', 'romance', 'love story', 'dreamy', 'date night', 'cute couple', 'rom com', 'rom-com'],
@@ -91,7 +90,8 @@ async function recommendByMood(moodText) {
 
   if (genreIds.length) {
     try {
-      const data = await tmdb.discoverByGenre(genreIds.join(','), 1);
+      // Use | (OR) so movies matching ANY matched genre are returned
+      const data = await tmdb.discoverByGenre(genreIds.join('|'), 1);
       results = data.results;
     } catch (err) {
       console.error('TMDB discover error:', err.message);
